@@ -4,11 +4,26 @@
  */
 package Vista;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import logica.BeneficiosEstudiantes;
+import logica.Estudiantes;
+import logica.PagosMensuales;
+
 /**
  *
  * @author Graciela
  */
 public class FrmPagosMensuales extends javax.swing.JFrame {
+    // Listas de datos
+    private List<PagosMensuales> listaPagos = new ArrayList<>();
+    private List<Estudiantes> listaEstudiantes = new ArrayList<>();
+    private List<BeneficiosEstudiantes> listaBeneficios = new ArrayList<>();
+    private List<BeneficiosEstudiantes> listaAsignaciones = new ArrayList<>();
+
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmPagosMensuales.class.getName());
 
@@ -18,6 +33,45 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
     public FrmPagosMensuales() {
         initComponents();
     }
+    
+    
+    
+    
+    /**
+ * Aplica filtros por estudiante, mes y año según los checkboxes seleccionados.
+ */
+private void aplicarFiltros() {
+    String filtroEst = chkEstudiante.getText().trim().toLowerCase();
+    String filtroMes = chkMes.getText().trim().toLowerCase();
+    String filtroAño = chkAnio.getText().trim();
+
+    DefaultTableModel modelo = (DefaultTableModel) tblPagos.getModel();
+    modelo.setRowCount(0);
+
+    for (PagosMensuales pago : listaPagos) {
+        boolean coincide = true;
+
+        if (chkEstudiante.isSelected() && !pago.getCarnet().toLowerCase().contains(filtroEst)) {
+            coincide = false;
+        }
+        if (chkMes.isSelected() && !pago.getMes().toLowerCase().contains(filtroMes)) {
+            coincide = false;
+        }
+        if (chkAnio.isSelected() && !pago.getAño().equals(filtroAño)) {
+            coincide = false;
+        }
+
+        if (coincide) {
+            modelo.addRow(new Object[]{
+                pago.getIdPago(), pago.getFechaCreacion(), pago.getMes(),
+                pago.getFechaPago(), pago.getCedulaEstudiante(),
+                pago.getTotalBeneficios(), pago.getDeducSeguro(),
+                pago.getDeducRenta(), pago.getPagoNeto()
+            });
+        }
+    }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,23 +87,25 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbMes = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtAnio = new javax.swing.JTextField();
+        btnGenerarPlanilla = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
+        btnMostrarPlanilla = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblPagos = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        chkEstudiante = new javax.swing.JCheckBox();
+        chkMes = new javax.swing.JCheckBox();
+        chkAnio = new javax.swing.JCheckBox();
         jTextField4 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -63,32 +119,56 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Fech. Actual");
 
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setText("Mes");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre", " ", " " }));
+        cmbMes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbMesActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setText("Año");
+
+        btnGenerarPlanilla.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnGenerarPlanilla.setText("Generar Plantilla");
+        btnGenerarPlanilla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarPlanillaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1)
-                    .addComponent(jComboBox1, 0, 125, Short.MAX_VALUE)
-                    .addComponent(jTextField2))
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField1)
+                            .addComponent(cmbMes, 0, 125, Short.MAX_VALUE)
+                            .addComponent(txtAnio)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(btnGenerarPlanilla)))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -100,13 +180,15 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
+                    .addComponent(txtAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnGenerarPlanilla)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -117,10 +199,18 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel6.setText("Mes");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel7.setText("Año");
+
+        btnMostrarPlanilla.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnMostrarPlanilla.setText("Mostrar Plantilla");
+        btnMostrarPlanilla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMostrarPlanillaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -128,15 +218,17 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField3))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnMostrarPlanilla)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel7)
+                            .addGap(18, 18, 18)
+                            .addComponent(jTextField3))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel6)
+                            .addGap(18, 18, 18)
+                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(49, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -150,12 +242,14 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnMostrarPlanilla)
+                .addGap(20, 20, 20))
         );
 
         jPanel3.setBackground(new java.awt.Color(204, 204, 204));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblPagos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -166,7 +260,7 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
                 "ID Pago", "Fec. Creacion", "Mes", "FechPago", "Estudiante", "TotalBeneficios", "DeducSeguro", "DeducRenta", "Pago Neto"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblPagos);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -188,14 +282,25 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel9.setText("Filtrar por");
 
-        jCheckBox1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jCheckBox1.setText("Estudiante");
+        chkEstudiante.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        chkEstudiante.setText("Estudiante");
 
-        jCheckBox2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jCheckBox2.setText("Mes");
+        chkMes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        chkMes.setText("Mes");
+        chkMes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkMesActionPerformed(evt);
+            }
+        });
 
-        jCheckBox3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jCheckBox3.setText("Año");
+        chkAnio.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        chkAnio.setText("Año");
+
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -215,21 +320,21 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(73, 73, 73))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(189, 189, 189)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(chkEstudiante, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
-                .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(chkMes, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(chkAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 28, Short.MAX_VALUE))
+                .addComponent(jTextField4)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,12 +347,12 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jCheckBox2)
-                    .addComponent(jCheckBox3)
+                    .addComponent(chkEstudiante)
+                    .addComponent(chkMes)
+                    .addComponent(chkAnio)
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addComponent(jLabel8)
@@ -257,6 +362,89 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void cmbMesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbMesActionPerformed
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void chkMesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkMesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkMesActionPerformed
+
+    private void btnGenerarPlanillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPlanillaActionPerformed
+        
+   String mes = cmbMes.getSelectedItem().toString();
+    String año = txtAnio.getText().trim();
+    LocalDate fechaActual = LocalDate.now();
+
+    if (año.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Ingrese el año.");
+        return;
+    }
+
+    // Validar que no exista ya una planilla para ese mes y año
+    for (PagosMensuales pago : listaPagos) {
+        if (pago.getMes().equalsIgnoreCase(mes) && pago.getAnio().equals(año)) {
+            JOptionPane.showMessageDialog(this, "Ya existe una planilla para ese mes y año.");
+            return;
+        }
+    }
+
+    // Generar pagos para cada estudiante con beneficios
+    for (Estudiantes est : listaEstudiantes) {
+        double total = calcularTotalBeneficios(est.getCarnet());
+        if (total == 0) continue;
+
+        double seguro = total * 0.10;
+        double renta = total * 0.05;
+        double neto = total - seguro - renta;
+
+        PagosMensuales nuevo = new PagosMensuales(
+            generarIdPago(), fechaActual, mes, fechaActual, est.getCarnet(),
+            total, seguro, renta, neto, año
+        );
+
+        listaPagos.add(nuevo);
+    }
+
+    JOptionPane.showMessageDialog(this, "Planilla generada correctamente.");
+    actualizarTabla();
+
+
+    }//GEN-LAST:event_btnGenerarPlanillaActionPerformed
+
+    private void btnMostrarPlanillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarPlanillaActionPerformed
+       /**
+ * Muestra los pagos registrados para un mes y año específico.
+ */
+
+    String mes = cmbMes.getSelectedItem().toString();
+    String año = txtAnio.getText().trim();
+
+    DefaultTableModel modelo = (DefaultTableModel) tblPagos.getModel();
+    modelo.setRowCount(0);
+
+    for (PagosMensuales pago : listaPagos) {
+        if (pago.getMes().equalsIgnoreCase(mes) && pago.getAño().equals(año)) {
+            modelo.addRow(new Object[]{
+                pago.getIdPago(), pago.getFechCreacion(), pago.getMes(),
+                pago.getFechPago(), pago.getCedulaEstudiante(),
+                pago.getTotalBeneficios(), pago.getDeducSeguro(),
+                pago.getDeducRenta(), pago.getPagoNeto()
+            });
+        }
+    }
+
+
+    }//GEN-LAST:event_btnMostrarPlanillaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -284,10 +472,12 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton btnGenerarPlanilla;
+    private javax.swing.JButton btnMostrarPlanilla;
+    private javax.swing.JCheckBox chkAnio;
+    private javax.swing.JCheckBox chkEstudiante;
+    private javax.swing.JCheckBox chkMes;
+    private javax.swing.JComboBox<String> cmbMes;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -302,10 +492,18 @@ public class FrmPagosMensuales extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JTable tblPagos;
+    private javax.swing.JTextField txtAnio;
     // End of variables declaration//GEN-END:variables
+
+    private double calcularTotalBeneficios(String carnet) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    private void actualizarTabla() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

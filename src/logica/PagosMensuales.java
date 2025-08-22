@@ -1,6 +1,5 @@
 package logica;
 import java.util.Calendar;
-import java.util.Locale;
 
 public class PagosMensuales {
  
@@ -13,6 +12,8 @@ public class PagosMensuales {
     private double deducSeguro;
     private double deducRenta;
     private double pagoNeto;
+    private String Calendar;
+    private String año;
 
     public PagosMensuales(String idPago, Calendar fechCreacion, String mes, Calendar fechPago, String estudiante, double totalBeneficios, double deducSeguro, double deducRenta, double pagoNeto) {
       
@@ -60,6 +61,11 @@ public class PagosMensuales {
     public String getMes() {
         return mes;
     }
+    
+    public String getAño(){
+        return año;
+    }
+    
     public void setMes(String mes) {
         this.mes = mes;
     }
@@ -102,6 +108,26 @@ public class PagosMensuales {
      @Override
     public String toString() {      // Podemos observar 
         return "Pago#" + idPago + " - " + mes + " - " + estudiante + " - Neto: " +
-                String.format(Locale.US, "%,.2f", pagoNeto);
+                String.format(Calendar + "%,.2f", pagoNeto);
 }
+
+    public Object getFechaCreacion() {
+        throw new UnsupportedOperationException("Not supported yet.");  
+    }
+
+    public Object getFechaPago() {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    public Object getCedulaEstudiante() {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    public Object getCarnet() {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    public Object getAnio() {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
 }

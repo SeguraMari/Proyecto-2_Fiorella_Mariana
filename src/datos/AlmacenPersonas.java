@@ -1,53 +1,48 @@
 package datos;
+
 import logica.Personas;
 import java.util.ArrayList;
-/**
- *
- * @author fzupi
- */
-public class AlmacenPersonas {
-     private ArrayList<Personas> listaPersonas;
 
-    public AlmacenPersonas() {
-        listaPersonas = new ArrayList<>();
+public class AlmacenPersonas {
+    private final ArrayList<Personas> listaPersonas = new ArrayList<>();
+
+    // Create
+    public boolean agregar(Personas p) throws Exception {
+        if (p == null) throw new Exception("Persona nula");
+        if (buscarPorCedula(p.getCedula()) != null) 
+            throw new Exception("Cédula duplicada");
+        return listaPersonas.add(p);
     }
-    // CREATE   (Agregar persona si no existe la cédula)
-    public boolean agregarPersona(Personas p) {
-        if (p == null || p.getCedula().isEmpty()) return false;
-        if (buscarPersona(p.getCedula()) != null) return false;
-        listaPersonas.add(p);
-        return true;
-    }
-    //READ  (Buscar por cédula)
-    public Personas buscarPersona(String cedula) {
+
+    // Read
+    public Personas buscarPorCedula(String cedula) {
         for (Personas p : listaPersonas) {
-            if (p.getCedula().equalsIgnoreCase(cedula)) {
-                return p;
-            }
+            if (p.getCedula().equals(cedula)) return p;
         }
         return null;
     }
-    //UPDATE       (Modificar nombre, teléfono, fecha, etc.)
-    public boolean modificarPersona(String cedula, String nuevoNombre, String nuevoTelefono) {
-        Personas p = buscarPersona(cedula);
-        if (p != null) {
-            p.setNombre(nuevoNombre);
-            p.setTelefono(nuevoTelefono);
-            return true;
-        }
-        return false;
+
+    // Update
+    public boolean modificar(Personas nueva) throws Exception {
+        Personas actual = buscarPorCedula(nueva.getCedula());
+        if (actual == null) throw new Exception("No existe la persona");
+        actual.setNombre(nueva.getNombre());
+        actual.setFechNac(nueva.getFechNac());
+        actual.setDireccion(nueva.getDireccion());
+        actual.setTelefono(nueva.getTelefono());
+        actual.setEmail(nueva.getEmail());
+        return true;
     }
-    // DELETE  elimina persona  por cédula
-    public boolean eliminarPersona(String cedula) {
-        Personas p = buscarPersona(cedula);
-        if (p != null) {
-            listaPersonas.remove(p);
-            return true;
-        }
-        return false;
+
+    // Delete
+    public boolean eliminar(String cedula) {
+        Personas p = buscarPorCedula(cedula);
+        if (p == null) return false;
+        return listaPersonas.remove(p);
     }
-    // Muestra  todas las personas
-    public ArrayList<Personas> getListaPersonas() {
-        return listaPersonas;
+
+    // Listar
+    public ArrayList<Personas> listar() {
+        return new ArrayList<>(listaPersonas);
     }
 }

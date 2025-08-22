@@ -1,53 +1,58 @@
 package datos;
+
 import java.util.ArrayList;
-import logica.Beneficios;
+import logica.BeneficiosEstudiantes;
+
 /**
- *
- * @author fzupi
+ * Clase AlmacenBeneficiosEstudiantes.
+ * Maneja la lista de relaciones entre Estudiantes y Beneficios.
  */
 public class AlmacenBeneficiosEstudiantes {
-private ArrayList<Beneficios > listaBeneficios;
+    private ArrayList<BeneficiosEstudiantes> listaAsignaciones;
 
     public AlmacenBeneficiosEstudiantes() {
-        listaBeneficios = new ArrayList<>();
+        listaAsignaciones = new ArrayList<>();
     }
-    // CREATE   (Agregar)
-    public boolean agregarBeneficio(Beneficios b) {
-        if (b == null || b.getIdBeneficio().isEmpty()) return false;
-        if (buscarBeneficio(b.getIdBeneficio()) != null) return false;
-        listaBeneficios.add(b);
-        return true;
-    }
-    // READ   (Buscar por ID) //  Leer
-    public Beneficios buscarBeneficio(String id) {
-        for (Beneficios b : listaBeneficios) {
-            if (b.getIdBeneficio().equalsIgnoreCase(id)) {
-                return b;
+
+    // CREATE (Asignar beneficio a estudiante)
+    public boolean asignarBeneficio(BeneficiosEstudiantes be) {
+        if (be == null) return false;
+
+        // Validar que no exista la misma combinación cedula-beneficio
+        for (BeneficiosEstudiantes asignacion : listaAsignaciones) {
+            if (asignacion.getCedula().equals(be.getCedula()) &&
+                asignacion.getIdBeneficio() == be.getIdBeneficio()) {
+                return false; // ya existe
             }
         }
-        return null;
+        listaAsignaciones.add(be);
+        return true;
     }
-    // UPDATE   (Modificar)
-    public boolean modificarBeneficio(String id, String nuevoNombre, double nuevoMonto) {
-        Beneficios b = buscarBeneficio(id);
-        if (b != null) {
-            b.setNomBeneficio(nuevoNombre);
-            b.setMontoBeneficio(nuevoMonto);
-            return true;
+
+    // READ (Buscar todas las asignaciones de un estudiante)
+    public ArrayList<BeneficiosEstudiantes> buscarPorCedula(String cedula) {
+        ArrayList<BeneficiosEstudiantes> resultados = new ArrayList<>();
+        for (BeneficiosEstudiantes be : listaAsignaciones) {
+            if (be.getCedula().equals(cedula)) {
+                resultados.add(be);
+            }
+        }
+        return resultados;
+    }
+
+    // DELETE (Eliminar asignación específica)
+    public boolean eliminarAsignacion(String cedula, int idBeneficio) {
+        for (BeneficiosEstudiantes be : listaAsignaciones) {
+            if (be.getCedula().equals(cedula) && be.getIdBeneficio() == idBeneficio) {
+                listaAsignaciones.remove(be);
+                return true;
+            }
         }
         return false;
     }
-    //   DELETE        (️ Eliminar)
-    public boolean eliminarBeneficio(String id) {
-        Beneficios b = buscarBeneficio(id);
-        if (b != null) {
-            listaBeneficios.remove(b);
-            return true;
-        }
-        return false;
-    }
-    // Listar todos
-    public ArrayList<Beneficios > getListaBeneficios() {
-        return listaBeneficios;
+
+    // Obtener todas las asignaciones
+    public ArrayList<BeneficiosEstudiantes> getListaAsignaciones() {
+        return listaAsignaciones;
     }
 }

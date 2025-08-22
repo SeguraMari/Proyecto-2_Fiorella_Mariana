@@ -4,6 +4,10 @@
  */
 package Vista;
 
+import Vista.FrmBeneficios;
+import Vista.FrmCrudEstudiante;
+import Vista.FrmPagosMensuales;
+
 /**
  *
  * @author Graciela
@@ -28,7 +32,69 @@ public class FrmModulos extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        mnModulos = new javax.swing.JMenu();
+        mnEstudiantes = new javax.swing.JMenuItem();
+        mnCarreras = new javax.swing.JMenuItem();
+        mnBeneficios = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        mnPagosMensuales = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jMenu1.setText("Archivos");
+        jMenuBar1.add(jMenu1);
+
+        mnModulos.setText("Modulos");
+        mnModulos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnModulosActionPerformed(evt);
+            }
+        });
+
+        mnEstudiantes.setText("Estudiantes");
+        mnEstudiantes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnEstudiantesActionPerformed(evt);
+            }
+        });
+        mnModulos.add(mnEstudiantes);
+
+        mnCarreras.setText("Carreras");
+        mnCarreras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnCarrerasActionPerformed(evt);
+            }
+        });
+        mnModulos.add(mnCarreras);
+
+        mnBeneficios.setText("Beneficios");
+        mnBeneficios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnBeneficiosActionPerformed(evt);
+            }
+        });
+        mnModulos.add(mnBeneficios);
+
+        jMenuItem1.setText(" Asignar Beneficios");
+        mnModulos.add(jMenuItem1);
+
+        mnPagosMensuales.setText("Pagos Mensuales");
+        mnPagosMensuales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnPagosMensualesActionPerformed(evt);
+            }
+        });
+        mnModulos.add(mnPagosMensuales);
+
+        jMenuBar1.add(mnModulos);
+
+        jMenu3.setText("Informacion");
+        jMenuBar1.add(jMenu3);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -38,11 +104,52 @@ public class FrmModulos extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 277, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void mnModulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnModulosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mnModulosActionPerformed
+
+    private void mnEstudiantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnEstudiantesActionPerformed
+                                     
+    FrmCrudEstudiante ventana = new FrmCrudEstudiante();
+    ventana.setVisible(true);
+    ventana.setLocationRelativeTo(this);
+
+
+    }//GEN-LAST:event_mnEstudiantesActionPerformed
+
+    private void mnCarrerasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCarrerasActionPerformed
+
+     FrmCarreras ventana = new FrmCarreras();
+     ventana.setVisible(true);
+     ventana.setLocationRelativeTo(this);
+     
+
+        
+    }//GEN-LAST:event_mnCarrerasActionPerformed
+
+    private void mnBeneficiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnBeneficiosActionPerformed
+                                      
+    FrmBeneficios ventana = new FrmBeneficios();
+    ventana.setVisible(true);
+    ventana.setLocationRelativeTo(this);
+
+
+    }//GEN-LAST:event_mnBeneficiosActionPerformed
+
+    private void mnPagosMensualesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnPagosMensualesActionPerformed
+                                                  
+    FrmPagosMensuales ventana = new FrmPagosMensuales();
+    ventana.setVisible(true);
+    ventana.setLocationRelativeTo(this);
+
+
+    }//GEN-LAST:event_mnPagosMensualesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +177,14 @@ public class FrmModulos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem mnBeneficios;
+    private javax.swing.JMenuItem mnCarreras;
+    private javax.swing.JMenuItem mnEstudiantes;
+    private javax.swing.JMenu mnModulos;
+    private javax.swing.JMenuItem mnPagosMensuales;
     // End of variables declaration//GEN-END:variables
 }

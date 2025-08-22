@@ -1,57 +1,46 @@
 package datos;
-import logica.Beneficios;
+
 import logica.Beneficios;
 import java.util.ArrayList;
-/**
- *
- * @author fzupi
- */
-public class AlmacenBeneficios {
-    private ArrayList<Beneficios > lista;
 
-    public AlmacenBeneficios() {   // ARRAYS
-        lista = new ArrayList<>();
+public class AlmacenBeneficios {
+    private final ArrayList<Beneficios> listaBeneficios = new ArrayList<>();
+
+    // Create
+    public boolean agregar(Beneficios b) throws Exception {
+        if (b == null) throw new Exception("Beneficio nulo");
+        if (buscarPorId(b.getIdBeneficio()) != null) 
+            throw new Exception("IdBeneficio duplicado");
+        return listaBeneficios.add(b);
     }
-    //  Verifica si ya existe un beneficio con ese ID
-    public boolean existeId(String idBeneficio) {
-        for (Beneficios b : lista) {
-            if (b.getIdBeneficio().equals(idBeneficio)) {
-                return true;
-            }
+
+    // Read
+    public Beneficios buscarPorId(String id) {
+        for (Beneficios b : listaBeneficios) {
+            if (b.getIdBeneficio().equals(id)) return b;
         }
-        return false;
+        return null;
     }
-    // AGREGA
-    public boolean agregarBeneficio(Beneficios nuevo) {      // CREATE beneficio Id si no existiera
-        if (!existeId(nuevo.getIdBeneficio())) {
-            lista.add(nuevo);
-            return true;
-        } else {
-            return false;
-        }
+
+    // Update
+    public boolean modificar(Beneficios nuevo) throws Exception {
+        Beneficios actual = buscarPorId(nuevo.getIdBeneficio());
+        if (actual == null) throw new Exception("No existe idBeneficio");
+        actual.setNomBeneficio(nuevo.getNomBeneficio());
+        actual.setDescripcion(nuevo.getDescripcion());
+        actual.setMontoBeneficio(nuevo.getMontoBeneficio());
+        return true;
     }
-    // LEE
-    public ArrayList<Beneficios> getLista() {        //  READ
-        return lista;
+
+    // Delete
+    public boolean eliminar(String id) {
+        Beneficios b = buscarPorId(id);
+        if (b == null) return false;
+        return listaBeneficios.remove(b);
     }
-    //  ACTUALIZA
-    public boolean actualizarBeneficio(String idBeneficio, Beneficios actualizado) {    //UPDATE beneficio por Id
-        for (int i = 0; i < lista.size(); i++) {
-            if (lista.get(i).getIdBeneficio().equals(idBeneficio)) {
-                lista.set(i, actualizado);
-                return true;
-            }
-        }
-        return false;
-    }
-    //ELIMINA
-    public boolean eliminarBeneficio(String idBeneficio) {       //DELETE beneficio por ID
-        for (Beneficios b : lista) {
-            if (b.getIdBeneficio().equals(idBeneficio)) {
-                lista.remove(b);
-                return true;
-            }
-        }
-        return false;
+
+    // Listar
+    public ArrayList<Beneficios> listar() {
+        return new ArrayList<>(listaBeneficios);
     }
 }

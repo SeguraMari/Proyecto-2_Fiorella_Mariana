@@ -1,18 +1,19 @@
 
 package logica;
 
-import java.time.LocalDate;
+
+import java.util.Calendar;
 
 public class Personas {
     private String cedula;
     private String nombre;
     private String apellidos;
-    private LocalDate fechNac;
+    private Calendar fechNac;
     private String direccion;
     private String telefono;
     private String email;
 
-    public Personas(String cedula, String nombre, String apellidos, LocalDate fechNac, String direccion, String telefono, String email) {
+    public Personas(String cedula, String nombre, String apellidos, Calendar fechNac, String direccion, String telefono, String email) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -49,10 +50,10 @@ public class Personas {
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
     }
-    public LocalDate getFechNac() {
+    public Calendar getFechNac() {
         return fechNac;
     }
-    public void setFechNac(LocalDate fechNac) {
+    public void setFechNac(Calendar fechNac) {
         this.fechNac = fechNac;
     }
     public String getDireccion() {

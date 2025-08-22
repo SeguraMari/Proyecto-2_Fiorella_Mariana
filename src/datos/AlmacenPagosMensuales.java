@@ -1,7 +1,6 @@
 package datos;
 import logica.PagosMensuales;
 import java.util.ArrayList;
-import java.time.LocalDate;
 /**
  *
  * @author fzupi
@@ -10,7 +9,7 @@ public class AlmacenPagosMensuales {
    private ArrayList<PagosMensuales> listaPagos = new ArrayList<>();
    
   // CREATE  (Crear)
-    public boolean agregarPago(PagosMensuales nuevoPago) {
+    public boolean añadirPago(PagosMensuales nuevoPago) {
         for (PagosMensuales pago : listaPagos) {
             if (pago.getIdPago().equals(nuevoPago.getIdPago())) {
                 return false; // Si el ID  esta duplicado
@@ -19,8 +18,8 @@ public class AlmacenPagosMensuales {
         listaPagos.add(nuevoPago);
         return true;
     }
-    // READ    ( Leer )
-    public PagosMensuales buscarPago(String idPago) {
+    // READ (Buscar un pago por ID)
+    public PagosMensuales buscarPago(int idPago) {
         for (PagosMensuales pago : listaPagos) {
             if (pago.getIdPago().equals(idPago)) {
                 return pago;
@@ -28,8 +27,9 @@ public class AlmacenPagosMensuales {
         }
         return null;
     }
-    // UPDATE     (  Actualizar  )
-    public boolean actualizarPago(String idPago, PagosMensuales pagoActualizado) {
+    
+    // UPDATE (Actualizar pago)
+    public boolean actualizarPago(int idPago, PagosMensuales pagoActualizado) {
         for (int i = 0; i < listaPagos.size(); i++) {
             if (listaPagos.get(i).getIdPago().equals(idPago)) {
                 listaPagos.set(i, pagoActualizado);
@@ -38,12 +38,21 @@ public class AlmacenPagosMensuales {
         }
         return false;
     }
-    // DELETE      (   Eliminar )
-    public boolean eliminarPago(String idPago) {
-        return listaPagos.removeIf(pago -> pago.getIdPago().equals(idPago));
+    
+    
+    // DELETE (Eliminar un pago)
+    public boolean eliminarPago(int idPago) {
+        for (int i = 0; i < listaPagos.size(); i++){
+            if (listaPagos.get(i).getIdPago().equals(idPago)){
+                listaPagos.remove(i);
+                return true;
+                
+            }
+        }
+        return false;
     }
     //Listar todos los pagos mensuales
-    public ArrayList<PagosMensuales> obtenerTodos() {
+    public ArrayList<PagosMensuales> getListaPagos() {
         return listaPagos;
     }
 }

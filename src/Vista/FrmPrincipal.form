@@ -66,7 +66,7 @@
                       <Group type="102" attributes="0">
                           <Component id="jLabel1" min="-2" pref="130" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtCantidadRegistros" min="-2" pref="253" max="-2" attributes="0"/>
+                          <Component id="txtCantidad" min="-2" pref="253" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace pref="19" max="32767" attributes="0"/>
@@ -83,7 +83,7 @@
                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtCantidadRegistros" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtCantidad" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -202,7 +202,7 @@
             <Property name="text" type="java.lang.String" value="Cantidad de Registros: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtCantidadRegistros">
+        <Component class="javax.swing.JTextField" name="txtCantidad">
         </Component>
       </SubComponents>
     </Container>
